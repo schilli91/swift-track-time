@@ -13,6 +13,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     @IBOutlet weak var startBtn: UIButton!
     @IBOutlet weak var stopBtn: UIButton!
+    @IBOutlet weak var saveBtn: UIButton!
+    
     @IBOutlet weak var activityTable: UITableView!
     
     @IBOutlet weak var startText: UITextField!
@@ -29,6 +31,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         activityTable.delegate = self
         activityTable.dataSource = self
         
+        startText.placeholder = "dd.mm.YYYY HH:mm:ss"
+        stopText.placeholder = "dd.mm.YYYY HH:mm:ss"
+        breakText.placeholder = "HH:mm"
+        
+        stopBtn.isEnabled = false
+        saveBtn.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,8 +65,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @IBAction func startRecording(_ sender: UIButton) {
-        currentActivity.startTime = Date()
-        startText.text = currentActivity.startTime!.toString(dateFormat: "dd.MM.YYYY HH:mm:ss")
+        let now = Date()
+        currentActivity.startTime = Int(now.timeIntervalSince1970)
+        startText.text = now.toString(dateFormat: "dd.MM.YYYY HH:mm:ss")
+        stopBtn.isEnabled = true
     }
     
     @IBAction func stopRecording(_ sender: UIButton) {
@@ -66,14 +76,35 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             os_log("startTime not set!", type:.info)
             return
         }
-        currentActivity.stopTime = Date()
-        stopText.text = currentActivity.stopTime!.toString(dateFormat: "dd.MM.YYYY HH:mm:ss")
-
+        let now = Date()
+        currentActivity.stopTime = Int(now.timeIntervalSince1970)
+        stopText.text = now.toString(dateFormat: "dd.MM.YYYY HH:mm:ss")
+        saveBtn.isEnabled = true
+    }
+    
+    @IBAction func saveActivity(_ sender: UIButton) {
+        let breakComponents = breakText.text!.components(separatedBy: ":")
+        if breakComponents.count > 1 {
+            currentActivity.breakTime = Int(breakComponents[0])! * 60 + Int(breakComponents[1])!
+        } else {
+            currentActivity.breakTime = 0
+        }
+        
         activities.append(currentActivity)
         activityTable.insertRows(at: [IndexPath(row: activities.count-1, section: 0)], with: .automatic)
         
-        //      TODO: currentActivity neu initialisieren, damit die Referenz nicht auf das gleiche Objekt zeigt.
+        currentActivity = ActivityRecord()
+        startText.text = nil
+        stopText.text = nil
+        breakText.text = nil
+        
+        stopBtn.isEnabled = false
+        saveBtn.isEnabled = false
+        
+        // Dismiss keyboard, after editing inputs.
+        view.endEditing(true)
     }
+    
     
 }
 

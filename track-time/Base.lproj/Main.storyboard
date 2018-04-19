@@ -118,6 +118,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NDM-qD-jPo">
+                                <rect key="frame" x="319" y="150" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Save"/>
+                                <connections>
+                                    <action selector="saveActivity:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Lui-w3-ZR0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -125,6 +133,7 @@
                     <connections>
                         <outlet property="activityTable" destination="9NL-Kk-mPC" id="Y2g-5b-NZj"/>
                         <outlet property="breakText" destination="FGA-dB-t2C" id="te6-tV-TSz"/>
+                        <outlet property="saveBtn" destination="NDM-qD-jPo" id="cff-48-2Ml"/>
                         <outlet property="startBtn" destination="3hK-wJ-rN2" id="uIP-lI-zhw"/>
                         <outlet property="startText" destination="v7K-Ep-mnR" id="fPk-lc-5Co"/>
                         <outlet property="stopBtn" destination="h9K-mt-9Ca" id="LCE-gW-4E0"/>

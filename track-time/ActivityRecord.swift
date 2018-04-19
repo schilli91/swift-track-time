@@ -9,27 +9,29 @@
 import Foundation
 
 class ActivityRecord {
-    var startTime: Date?
-    var stopTime: Date?
+//  TODO: start and stop time must be integers storing minutes / seconds ?
+    var startTime: Int?
+    var stopTime: Int?
+    var breakTime: Int?
     
     init() {
         
     }
     
     func getDurationString() -> String {
-        let diff = stopTime?.interval(ofComponent: .day, fromDate: startTime!)
-        if diff! > 0 {
-            return startTime!.toString(dateFormat: "dd.MM.YYYY HH:mm") + " - " + stopTime!.toString(dateFormat:"dd.MM.YYYY HH:mm")
+        let diff = stopTime! - startTime!
+        if diff >= 86400 {
+            // TODO: do something when start and stop are on different days.
         }
         
-        return startTime!.toString(dateFormat: "dd.MM.YYYY HH:mm") + " - " + stopTime!.toString(dateFormat:"HH:mm")
+        return Date(timeIntervalSince1970: TimeInterval(startTime!)).toString(dateFormat: "dd.MM.YYYY HH:mm") + " - " + Date(timeIntervalSince1970: TimeInterval(stopTime!)).toString(dateFormat:"HH:mm")
     }
     
     func getActivityDuration() -> String {
-        let activityDuration = stopTime?.interval(ofComponent: .minute, fromDate: startTime!)
+        let activityDuration = (stopTime! - startTime!) / 60
         
-        let activityMinutes = activityDuration! % 60
-        let activityHours = activityDuration! / 60
+        let activityMinutes = activityDuration % 60
+        let activityHours = activityDuration / 60
         
         let minutesLeadingZero = activityMinutes > 9 ? "" : "0"
         let hoursLeadingZero = activityHours > 9 ? "" : "0"
